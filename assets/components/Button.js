@@ -13,7 +13,7 @@ export const Button = ({ text, onPressFun }) => {
 const styles = StyleSheet.create({
   button: {
     height: 60,
-    width: "50%",
+    // width: "100%",
     alignItems: "center",
     justifyContent: "center",
     // La couleur que je veux

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     // J'utilise une clé de mon "objet" colors
     borderBottomColor: colors.lightPink,
     borderBottomWidth: 2,
-    width: "80%",
+    width: "100%",
     fontSize: 16,
   },
 });

@@ -19,5 +19,6 @@ const styles = StyleSheet.create({
   text: {
     // La couleur que je veux dans le fichier colors que j'ai importé
     color: colors.grey,
+    lineHeight: 50,
   },
 });

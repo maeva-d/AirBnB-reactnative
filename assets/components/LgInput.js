@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     // La couleur que je veux
     borderColor: colors.lightPink,
     borderWidth: 2,
-    width: "80%",
+    width: "100%",
     marginBottom: 30,
     marginTop: 15,
     fontSize: 16,

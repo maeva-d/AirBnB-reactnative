@@ -17,13 +17,16 @@ import {
   RedirectButton,
 } from "../assets/components/index";
 
+import colors from "../assets/styles/colors";
+
 export default function HomePage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
+    // event.preventDefault();
+    console.log("clicked");
     try {
       if (email === "nono@airbnb-api.com" && password === "pass") {
         setErrorMessage("");
@@ -36,17 +39,17 @@ export default function HomePage() {
         );
         console.log(response.data);
         alert("Connexion succeeded");
-      }
-    } catch (error) {
-      if (email === "nono@airbnb-api.com" && password !== "pass") {
+      } else if (email === "" || password === "") {
+        console.log("clicked 2");
+        return setErrorMessage("Please fill all fields");
+      } else if (email === "nono@airbnb-api.com" && password !== "pass") {
+        console.log("clicked 1");
         return setErrorMessage("Password incorrect");
-      }
-      if (email !== "nono@airbnb-api.com") {
+      } else if (email !== "nono@airbnb-api.com") {
+        console.log("clicked 3");
         return setErrorMessage("This email doesn't have an account");
       }
-      if (email === "" || password === "") {
-        return setErrorMessage("Please fill all field");
-      }
+    } catch (error) {
       console.log(error.response.data.error);
     }
   };
@@ -58,19 +61,27 @@ export default function HomePage() {
     >
       {/* -- HEADER -- */}
       <View style={styles.mainView}>
-        <Logo />
-        <Title title={"Log in"} />
+        <View style={styles.section}>
+          <Logo />
+          <Title title={"Log in"} />
+        </View>
         {/* -- FORM -- */}
-        <SmInput state={email} setState={setEmail} placeholder={"email"} />
-        <SmInput
-          state={password}
-          setState={setPassword}
-          placeholder={"password"}
-          secure // vrai par défaut
-        />
-        {errorMessage !== "" && <Text>{errorMessage}</Text>}
-        <Button text={"Log in"} onPressFun={handleSubmit} />
-        <RedirectButton text={"No account ? Register !"} screen={"/signup"} />
+        <View>
+          <SmInput state={email} setState={setEmail} placeholder={"email"} />
+          <SmInput
+            state={password}
+            setState={setPassword}
+            placeholder={"password"}
+            secure // vrai par défaut
+          />
+        </View>
+        <View style={styles.section}>
+          {errorMessage !== "" && (
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          )}
+          <Button text={"Log in"} onPressFun={handleSubmit} />
+          <RedirectButton text={"No account ? Register !"} screen={"/signUp"} />
+        </View>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -81,5 +92,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around",
     alignItems: "center",
+    padding: 25,
+  },
+
+  section: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  errorText: {
+    color: colors.pink,
+    lineHeight: 45,
   },
 });

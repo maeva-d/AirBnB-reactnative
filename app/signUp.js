@@ -11,6 +11,16 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 // j'ai besoin d'une des couleurs ici
 import colors from "../assets/styles/colors";
 
+// J'importe les components créés plus tôt dans assets dont j'ai besoin, qui sont tous rassemblés dans index.js du dossier component
+import {
+  Logo,
+  Title,
+  SmInput,
+  LgInput,
+  Button,
+  RedirectButton,
+} from "../assets/components/index";
+
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -22,7 +32,12 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     // event.preventDefault();
     try {
-      if (email === "nono@airbnb-api.com" && password === "pass") {
+      if (
+        email === "nono@airbnb-api.com" &&
+        password === "pass" &&
+        confirmPassword === password &&
+        description !== ""
+      ) {
         setErrorMessage("");
         const response = await axios.post(
           "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
@@ -32,21 +47,20 @@ export default function SignUp() {
           }
         );
         console.log(response.data);
-        alert("Connexion succeeded");
+        alert("Account created");
+      } else if (password !== confirmPassword) {
+        return setErrorMessage("Passwords must be the same.");
+      } else if (
+        email === "" ||
+        password === "" ||
+        confirmPassword == "" ||
+        description === ""
+      ) {
+        return setErrorMessage("Please fill all fields");
+      } else if (email === "nono@airbnb-api.com") {
+        return setErrorMessage("This email already has an account");
       }
     } catch (error) {
-      if (email === "nono@airbnb-api.com" && password !== "pass") {
-        return setErrorMessage("Password incorrect");
-      }
-      if (password !== confirmPassword) {
-        return setErrorMessage("Your passwords must be identical");
-      }
-      if (email !== "nono@airbnb-api.com") {
-        return setErrorMessage("This email doesn't have an account");
-      }
-      if (email === "" || password === "") {
-        return setErrorMessage("Please fill all field");
-      }
       console.log(error.response.data.error);
     }
   };
@@ -56,39 +70,49 @@ export default function SignUp() {
       style={{ flex: 1 }}
       contentContainerStyle={{ flex: 1 }}
     >
+      {/* -- HEADER -- */}
       <View style={styles.mainView}>
-        <Logo />
-        <Title title={"Sign up"} />
-        <Input
-          state={username}
-          setState={setUsername}
-          placeholder={"username"}
-        />
-        <Input state={email} setState={setEmail} placeholder={"email"} />
-        <LargeInput
-          state={description}
-          setState={setDescription}
-          placeholder={"describe yourself"}
-        />
-        <Input
-          state={password}
-          setState={setPassword}
-          placeholder={"password"}
-          secure
-        />
-        <Input
-          state={confirmPassword}
-          setState={setConfirmPassword}
-          placeholder={"confirm password"}
-          secure
-        />
-        {errorMessage !== "" && <Text>{errorMessage}</Text>}
-        <Button text={"Sign up"} onPressFun={handleSubmit} />
-        <RedirectButton
-          text={"Already have an account ? Login !"}
-          screen={"/"}
-          //  ^ à compléter plus tard ^
-        />
+        <View style={styles.section}>
+          <Logo />
+          <Title title={"Sign in"} />
+        </View>
+        {/* -- FORM -- */}
+        <View>
+          <SmInput
+            state={username}
+            setState={setUsername}
+            placeholder={"username"}
+          />
+          <SmInput state={email} setState={setEmail} placeholder={"email"} />
+          <LgInput
+            state={description}
+            setState={setDescription}
+            placeholder={"describe yourself"}
+          />
+          <SmInput
+            state={password}
+            setState={setPassword}
+            placeholder={"password"}
+            secure
+          />
+          <SmInput
+            state={confirmPassword}
+            setState={setConfirmPassword}
+            placeholder={"confirm password"}
+            secure
+          />
+        </View>
+        <View style={styles.section}>
+          {errorMessage !== "" && (
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          )}
+          <Button text={"Sign up"} onPressFun={handleSubmit} />
+          <RedirectButton
+            text={"Already have an account ? Login !"}
+            screen={"/"}
+            //  ^ à compléter plus tard ^
+          />
+        </View>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -96,9 +120,19 @@ export default function SignUp() {
 
 const styles = StyleSheet.create({
   mainView: {
-    backgroundColor: colors.bgColor,
-    alignItems: "center",
-    justifyContent: "space-around",
     flex: 1,
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: 25,
+  },
+
+  section: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  errorText: {
+    color: colors.pink,
+    lineHeight: 45,
   },
 });

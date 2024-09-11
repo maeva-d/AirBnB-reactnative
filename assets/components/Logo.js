@@ -16,5 +16,6 @@ const styles = StyleSheet.create({
   mainLogo: {
     height: 100,
     width: 100,
+    marginVertical: 40,
   },
 });
