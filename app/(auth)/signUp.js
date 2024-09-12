@@ -9,7 +9,7 @@ import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 // j'ai besoin d'une des couleurs ici
-import colors from "../assets/styles/colors";
+import colors from "../../assets/styles/colors";
 
 // J'importe les components créés plus tôt dans assets dont j'ai besoin, qui sont tous rassemblés dans index.js du dossier component
 import {
@@ -19,7 +19,7 @@ import {
   LgInput,
   Button,
   RedirectButton,
-} from "../assets/components/index";
+} from "../../assets/components/index";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -29,8 +29,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (event) => {
-    // event.preventDefault();
+  const handleSubmit = async () => {
     try {
       if (
         email === "nono@airbnb-api.com" &&

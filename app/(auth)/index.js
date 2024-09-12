@@ -15,9 +15,9 @@ import {
   SmInput,
   Button,
   RedirectButton,
-} from "../assets/components/index";
+} from "../../assets/components/index";
 
-import colors from "../assets/styles/colors";
+import colors from "../../assets/styles/colors";
 
 export default function HomePage() {
   const [email, setEmail] = useState("");
@@ -25,7 +25,6 @@ export default function HomePage() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async () => {
-    // event.preventDefault();
     console.log("clicked");
     try {
       if (email === "nono@airbnb-api.com" && password === "pass") {
