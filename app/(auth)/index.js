@@ -1,6 +1,5 @@
 // REQUETE
 import axios from "axios";
-
 // hooks
 import { useContext, useState } from "react";
 
@@ -21,6 +20,8 @@ import {
 import { AuthContext } from "../../context/AuthContext";
 
 import colors from "../../assets/styles/colors";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomePage() {
   const [email, setEmail] = useState("");
@@ -43,6 +44,8 @@ export default function HomePage() {
         );
         console.log(response.data);
         alert("Connexion succeeded");
+        // await AsyncStorage.setItem("name", response.data.username)
+        await AsyncStorage.setItem("password", password);
         login(response.data.id, response.data.token); // La redirection sera gérée par NavigationWrapper
       } else if (email === "" || password === "") {
         console.log("clicked 2");
