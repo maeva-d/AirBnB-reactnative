@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // hooks
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 // components
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
@@ -20,6 +20,7 @@ import {
   Button,
   RedirectButton,
 } from "../../assets/components/index";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,8 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // J'importe la fonction dans mon contexte que je veux utiliser
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     try {
@@ -47,6 +50,7 @@ export default function SignUp() {
         );
         console.log(response.data);
         alert("Account created");
+        login(response.data.id, response.data.token);
       } else if (password !== confirmPassword) {
         return setErrorMessage("Passwords must be the same.");
       } else if (
@@ -73,7 +77,7 @@ export default function SignUp() {
       <View style={styles.mainView}>
         <View style={styles.section}>
           <Logo />
-          <Title title={"Sign in"} />
+          <Title title={"Sign up"} />
         </View>
         {/* -- FORM -- */}
         <View>

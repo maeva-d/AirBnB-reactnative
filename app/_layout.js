@@ -1,5 +1,11 @@
-import { Stack } from "expo-router";
+import { AuthContext, AuthProvider } from "../context/AuthContext";
+
+import NavigationWrapper from "../assets/components/NavigationWrapper";
 
 export default RootLayout = () => {
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <AuthProvider>
+      <NavigationWrapper />
+    </AuthProvider>
+  );
 };

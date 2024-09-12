@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // hooks
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 // components native dont j'ai besoin pour ma page log in
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
@@ -17,12 +17,17 @@ import {
   RedirectButton,
 } from "../../assets/components/index";
 
+// J'importe mon contexte !
+import { AuthContext } from "../../context/AuthContext";
+
 import colors from "../../assets/styles/colors";
 
 export default function HomePage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // J'importe la fonction dans mon contexte que je veux utiliser
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     console.log("clicked");
@@ -38,6 +43,7 @@ export default function HomePage() {
         );
         console.log(response.data);
         alert("Connexion succeeded");
+        login(response.data.id, response.data.token); // La redirection sera gérée par NavigationWrapper
       } else if (email === "" || password === "") {
         console.log("clicked 2");
         return setErrorMessage("Please fill all fields");
