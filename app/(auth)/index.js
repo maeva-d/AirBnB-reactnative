@@ -4,7 +4,13 @@ import axios from "axios";
 import { useContext, useState } from "react";
 
 // components native dont j'ai besoin pour ma page log in
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+  useWindowDimensions,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 // J'importe les components créés plus tôt dans assets dont j'ai besoin, qui sont tous rassemblés dans index.js du dossier component
@@ -14,7 +20,7 @@ import {
   SmInput,
   Button,
   RedirectButton,
-} from "../../assets/components/index";
+} from "../../assets/components/signup-and-login/index";
 
 // J'importe mon contexte !
 import { AuthContext } from "../../context/AuthContext";
@@ -23,7 +29,7 @@ import colors from "../../assets/styles/colors";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function HomePage() {
+export default HomePage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -31,34 +37,34 @@ export default function HomePage() {
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async () => {
-    console.log("clicked");
+    // console.log("clicked");
     try {
-      if (email === "nono@airbnb-api.com" && password === "pass") {
-        setErrorMessage("");
-        const response = await axios.post(
-          "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
-          {
-            email: email,
-            password: password,
-          }
-        );
-        console.log(response.data);
-        alert("Connexion succeeded");
-        // await AsyncStorage.setItem("name", response.data.username)
-        await AsyncStorage.setItem("password", password);
-        login(response.data.id, response.data.token); // La redirection sera gérée par NavigationWrapper
-      } else if (email === "" || password === "") {
-        console.log("clicked 2");
-        return setErrorMessage("Please fill all fields");
-      } else if (email === "nono@airbnb-api.com" && password !== "pass") {
-        console.log("clicked 1");
-        return setErrorMessage("Password incorrect");
-      } else if (email !== "nono@airbnb-api.com") {
-        console.log("clicked 3");
-        return setErrorMessage("This email doesn't have an account");
-      }
+      setErrorMessage("");
+      const response = await axios.post(
+        "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      // console.log(response.data);
+      alert("Connexion succeeded");
+      // console.log(response.data.token, response.data.id);
+      await AsyncStorage.setItem("id", response.data.id);
+      await AsyncStorage.setItem("token", response.data.token);
+      login(response.data.id, response.data.token); // La redirection sera gérée par NavigationWrapper
     } catch (error) {
-      console.log(error.response.data.error);
+      // console.log(error.response.data.error);
+      if (error.response.data.error === "This account doesn't exist !") {
+        return setErrorMessage(error.response.data.error);
+      }
+      if (error.response.data.error === "Missing parameter(s)") {
+        return setErrorMessage("Please fill all fields");
+      }
+      if (error.response.data.error === "Unathorized") {
+        return setErrorMessage("Your password is not correct");
+      }
+      return setErrorMessage(error.response.data.error);
     }
   };
 
@@ -93,7 +99,7 @@ export default function HomePage() {
       </View>
     </KeyboardAwareScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   mainView: {

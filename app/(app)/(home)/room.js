@@ -1,5 +1,5 @@
 import { Text } from "react-native";
 
-export default Home = () => {
+export default Room = () => {
   return <Text>Voici la page room</Text>;
 };

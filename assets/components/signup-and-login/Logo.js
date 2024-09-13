@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
 
 // J'importe mon image
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 
 // J'exporte mon composant, mais pas par défaut
 export const Logo = () => {
@@ -14,8 +14,8 @@ export const Logo = () => {
 
 const styles = StyleSheet.create({
   mainLogo: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
     marginVertical: 40,
   },
 });

@@ -1,14 +1,19 @@
 // REQUETE
 import axios from "axios";
-
 // hooks
 import { useState, useContext } from "react";
-
 // components
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  useWindowDimensions,
+  ActivityIndicator,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-// j'ai besoin d'une des couleurs ici
+// j'ai besoin d'une des couleurs
 import colors from "../../assets/styles/colors";
 
 // J'importe les components créés plus tôt dans assets dont j'ai besoin, qui sont tous rassemblés dans index.js du dossier component
@@ -19,60 +24,51 @@ import {
   LgInput,
   Button,
   RedirectButton,
-} from "../../assets/components/index";
+} from "../../assets/components/signup-and-login/index";
 import { AuthContext } from "../../context/AuthContext";
 
-export default function SignUp() {
+export default SignUp = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  // J'importe la fonction dans mon contexte que je veux utiliser
+  // J'importe la fonction  que je veux utiliser qui se trouve dans mon contexte
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     try {
-      if (
-        email === "nono@airbnb-api.com" &&
-        password === "pass" &&
-        confirmPassword === password &&
-        description !== ""
-      ) {
+      if (password !== confirmPassword) {
+        return setErrorMessage("Passwords must be the same.");
+      } else {
         setErrorMessage("");
         const response = await axios.post(
-          "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
+          "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/sign_up",
           {
             email: email,
+            username: username,
+            description: description,
             password: password,
           }
         );
-        console.log(response.data);
         alert("Account created");
         login(response.data.id, response.data.token);
-      } else if (password !== confirmPassword) {
-        return setErrorMessage("Passwords must be the same.");
-      } else if (
-        email === "" ||
-        password === "" ||
-        confirmPassword == "" ||
-        description === ""
-      ) {
-        return setErrorMessage("Please fill all fields");
-      } else if (email === "nono@airbnb-api.com") {
-        return setErrorMessage("This email already has an account");
       }
     } catch (error) {
-      console.log(error.response.data.error);
+      // console.log(error.response.data.error);
+      if (error.response.data.error === "Missing parameter(s)") {
+        return setErrorMessage("Please fill all fields");
+      }
+      if (error.response.data.error === "This email already has an account.") {
+        return setErrorMessage(error.response.data.error);
+      }
+      return setErrorMessage(error.response.data.error);
     }
   };
 
   return (
-    <KeyboardAwareScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ flex: 1 }}
-    >
+    <ScrollView>
       {/* -- HEADER -- */}
       <View style={styles.mainView}>
         <View style={styles.section}>
@@ -105,7 +101,7 @@ export default function SignUp() {
             secure
           />
         </View>
-        <View style={styles.section}>
+        <View style={[styles.section, { marginVertical: 50 }]}>
           {errorMessage !== "" && (
             <Text style={styles.errorText}>{errorMessage}</Text>
           )}
@@ -117,13 +113,12 @@ export default function SignUp() {
           />
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   mainView: {
-    flex: 1,
     justifyContent: "space-around",
     alignItems: "center",
     padding: 25,
