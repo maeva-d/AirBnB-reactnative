@@ -27,6 +27,8 @@ import {
 } from "../../assets/components/signup-and-login/index";
 import { AuthContext } from "../../context/AuthContext";
 
+import { router } from "expo-router";
+
 export default SignUp = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -36,6 +38,9 @@ export default SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
   // J'importe la fonction  que je veux utiliser qui se trouve dans mon contexte
   const { login } = useContext(AuthContext);
+
+  /////// Supprimer la ligne du bas plus tard
+  // router.replace("/home");
 
   const handleSubmit = async () => {
     try {

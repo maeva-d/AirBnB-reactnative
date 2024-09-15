@@ -48,7 +48,6 @@ export default HomePage = () => {
         }
       );
       // console.log(response.data);
-      alert("Connexion succeeded");
       // console.log(response.data.token, response.data.id);
       await AsyncStorage.setItem("id", response.data.id);
       await AsyncStorage.setItem("token", response.data.token);

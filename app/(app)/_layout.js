@@ -5,7 +5,7 @@ export default AppLayout = () => {
   return (
     <Tabs>
       <Tabs.Screen
-        name="home"
+        name="(home)"
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (
@@ -18,7 +18,7 @@ export default AppLayout = () => {
         options={{
           title: "Around me",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="person" size={24} color={color} />
+            <Ionicons name="location-outline" size={24} color={color} />
           ),
         }}
       />
@@ -27,11 +27,7 @@ export default AppLayout = () => {
         options={{
           title: "My profile",
           tabBarIcon: ({ color }) => (
-            <Ionicons
-              name="location-outline"
-              size={24}
-              color={color}
-            ></Ionicons>
+            <Ionicons name="person" size={24} color={color}></Ionicons>
           ),
         }}
       />
